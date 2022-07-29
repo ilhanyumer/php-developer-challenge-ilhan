@@ -1,0 +1,19 @@
+{
+    "name": "sensika/challenge",
+    "description": "Sensika Senior PHP Developer Challenge",
+    "type": "project",
+    "require": {
+        "php": ">=7.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sensika\\Challenge\\": "src/Sensika/Challenge"
+        }
+    },
+    "authors": [
+        {
+            "name": "Nenko Ivanov",
+            "email": "nenko.ivanov@sensika.com"
+        }
+    ]
+}
