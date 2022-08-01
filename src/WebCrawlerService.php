@@ -23,6 +23,9 @@ class WebCrawlerService
         $this->xpath = $xpath;
     }
 
+    /**
+     * @return NewsList
+     */
     public function run(): NewsList
     {
         return $this->getNewsList();
@@ -40,6 +43,9 @@ class WebCrawlerService
         return $content;
     }
 
+    /**
+     * @return NewsList
+     */
     public function getNewsList(): NewsList
     {
         $content = $this->getContent();
@@ -54,10 +60,33 @@ class WebCrawlerService
             $href = $domPart->getAttribute('href');
             $nodeValue = trim($domPart->nodeValue);
             $news->setTitle($nodeValue);
+
+            // If the URL is relative construct the absolute URL
+            if (filter_var($href, FILTER_VALIDATE_URL) === false) {
+                $href = $this->constructUrl($href);
+            }
+
             $news->setUrl($href);
             $newsListObj->addNews($news);
         }
 
         return $newsListObj;
+    }
+
+    /**
+     * @param string $endingPart
+     * @return string
+     */
+    private function constructUrl(string $endingPart): string
+    {
+        $firstPart = $this->siteUrl;
+        $lastPart = $endingPart;
+        if (substr($this->siteUrl, -1) !== '/') {
+            $firstPart .= '/';
+        }
+        if ($endingPart[0] === '/') {
+            $lastPart = substr($endingPart, 1);
+        }
+        return $firstPart . $lastPart;
     }
 }
